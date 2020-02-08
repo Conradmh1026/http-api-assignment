@@ -1,0 +1,105 @@
+const respondJSON = (request, response, status, object, acceptedTypes) => {
+    if(acceptedTypes[0]==='text/xml')
+    {
+      let responseXML = '<response>';
+      responseXML = `${responseXML} <id>${object.id}</id>`;
+      responseXML = `${responseXML} <output>${object.message}</output>`;
+      responseXML = `${responseXML} </response>`;
+  
+      response.writeHead(status, headers);
+      response.write(responseXML);
+      response.end();
+    }
+    else{
+        response.writeHead(status, headers);
+        response.write(JSON.stringify(object));
+        response.end();
+    }
+  };
+
+  const respondJSONMeta = (request, response, status, acceptedTypes) => {
+    response.writeHead(status, { 'Content-Type': 'application/json' });
+    response.end();
+  };
+  
+  const success = (request, response, acceptedTypes) => {
+    const responseJSON = {
+      message: 'This is a successful response',
+    };
+  
+    respondJSON(request, response, 200, responseJSON);
+  };
+  
+  const badRequest = (request, response, acceptedTypes) => {
+    const responseJSON = {
+      message: 'This request has the required parameters',
+    };
+  
+    if(!acceptedTypes.valid || acceptedTypes.valid !== 'true')
+    {
+      responseJSON.message = 'Missing valid query parameter set to true',
+      responseJSON.id = 'badRequest';
+  
+      return respondJSON(request, response, 400 , responseJSON);
+    }
+    return  respondJSON(request, response, 200 , responseJSON);  
+  };
+  
+  const notFound = (request, response, acceptedTypes) => {
+    const responseJSON = {
+      message: 'The page you are looking for was not found.',
+      id: 'notFound',
+    };
+  
+    respondJSON(request,response, 404 ,responseJSON);  
+  };
+
+  const notAllowed = (request, response, acceptedTypes, params) =>
+  {
+    const responseJSON = {
+        message: 'Success, Now have access',
+        id: 'Success',
+    };
+    if(!params || params !== 'login')
+    {
+        responseJSON.message = 'You are blocked from access',
+        responseJSON.id = 'unauthorized';
+
+        return respondJSON(request, response, 401, responseJSON, acceptedTypes);
+    }
+    return respondJSON(request, response, 200, responseJSON, acceptedTypes);
+  };
+  const forbidden = (request, response, acceptedTypes) =>
+  {
+    const responseJSON = {
+        message: 'Forbidden Access',
+        id: 'Forbidden',
+    };
+    return respondJSON(request, response, 403, responseJSON, acceptedTypes);
+  };
+  const internal = (request, response, acceptedTypes) =>
+  {
+    const responseJSON = {
+        message: 'An Internal Error',
+        id: 'Internal Error',
+    };
+    return respondJSON(request, response, 500, responseJSON, acceptedTypes);
+  };
+  const notImplemented = (request, response, acceptedTypes) =>
+  {
+    const responseJSON = {
+        message: 'Items have not been created',
+        id: 'Not Implemented',
+    };
+    return respondJSON(request, response, 403, responseJSON, acceptedTypes);
+  };
+  
+  module.exports = {
+    success,
+    badRequest,
+    notFound,
+    notAllowed,
+    forbidden,
+    internal,
+    notImplemented,
+  };

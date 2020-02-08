@@ -1,0 +1,25 @@
+{
+  "name": "http-api-assignment",
+  "version": "1.0.0",
+  "description": "HTTP API",
+  "main": "index.js",
+  "dependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.20.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Conradmh1026/http-api-assignment.git"
+  },
+  "author": "Conrad Hindman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Conradmh1026/http-api-assignment/issues"
+  },
+  "homepage": "https://github.com/Conradmh1026/http-api-assignment#readme"
+}
