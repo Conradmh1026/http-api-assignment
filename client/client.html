@@ -8,7 +8,10 @@
   <script type="text/babel">
     const handleResponse = (xhr, parseResponse) => {
       const content = document.querySelector('#content');
+      const acceptTypes = xhr.getResponseHeader('content-type');
 
+      if(acceptTypes === 'application/json')
+      {
       switch(xhr.status)
       {
         case 200:
@@ -45,9 +48,11 @@
         content.innerHTML += `<p>${xhr.response}</p>`;
         content.innerHTML += `<p>${obj.message}</p>`;
       }
-      else{
-        content.innerHTML += `<p>Meta Data Recieved</p>`;
+      else if(acceptTypes === 'text/xml'){
+        const id = xhr.responseXML.querySelector('id').textContent;
+        const message = xhr.responseXML.querySelector('message').textContent;
       }
+    }
       
     };
 
@@ -78,10 +83,11 @@
 
     const init = () => {
       const userForm = document.querySelector('#userForm');
+      const btn = document.querySelector('#button')
       
       const getUsers = (e) => requestUpdate(e, userForm);
       
-      userForm.addEventListener('submit', getUsers);
+      btn.addEventListener('submit', getUsers);
     };
 
     window.onload = init;

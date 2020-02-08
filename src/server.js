@@ -14,23 +14,22 @@ const urlStruct = {
   '/forbidden': jsonHandler.forbidden,
   '/internal': jsonHandler.internal,
   '/notImplemented': jsonHandler.notImplemented,
-    notFound: jsonHandler.notFound,
+  notFound: jsonHandler.notFound,
 };
 
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
+  const acceptTypes = request.headers.accept.split(',');
 
-  console.dir(request.url);
-  console.dir(parsedUrl);
-  console.dir(params);
-
-  if(urlStruct[parsedUrl.pathname])
-  {
-    urlStruct[parsedUrl.pathname](request,response,params);
-  }
-  else{
-    urlStruct.notFound(request,response,params);
+  if (urlStruct[parsedUrl.pathname]) {
+    if (params) {
+      urlStruct[parsedUrl.pathname](request, response, acceptTypes, params);
+    } else {
+      urlStruct[parsedUrl.pathname](request, response, acceptTypes);
+    }
+  } else {
+    urlStruct.notFound(request, response, params);
   }
 };
 
